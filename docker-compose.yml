@@ -1,7 +1,7 @@
 version: "3"
 services:
   db_seg_1:
-    image: greenplum:6.13.0
+    image: greenplum:6
     build: .
     container_name: db_seg_1
     environment:
@@ -13,7 +13,7 @@ services:
     networks:
       - xdzsoft
   db_seg_2:
-    image: greenplum:6.13.0
+    image: greenplum:6
     build: .
     container_name: db_seg_2
     environment:

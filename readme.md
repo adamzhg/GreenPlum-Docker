@@ -1,13 +1,13 @@
 # greenplum-docker
-Docker for greenplum (6.13.0) database.
+Docker for greenplum (6) database.
 
 ## Build
-docker build -t greenplum:6.13.0 .
+docker build -t greenplum:6 .
 
 ## Single Node Docker
 
 From the command line execute the following command:
-docker run -it -p 5432:5432 --hostname=db_master_1  --name reflect-gpdb ubuntu-gpdb bash
+docker run -it -p 5432:5432 --hostname=db_master_1 greenplum:6 bash
 
 Connect to your host on port 5432 user/pass is gpadmin/dataroad
 

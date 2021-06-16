@@ -7,21 +7,22 @@ source ${GPHOME}/greenplum_path.sh
 
 m="master"
 if [ "$GP_NODE" == "$m" ]
-
 then
-     echo 'Node type='$GP_NODE
+    echo 'Node type='$GP_NODE
     if [ ! -d $MASTER_DATA_DIRECTORY ]; then
         echo 'Master directory does not exist. Initializing master from gpinitsystem_reflect.'
         yes | cp $HOSTFILE hostlist
         gpssh-exkeys -f hostlist
         echo "Key exchange complete"
-        gpinitsystem -a  -c gpinitsys --su_password=dataroad
+        gpinitsystem -a -c gpinitsys --su_password=dataroad -h hostlist
         echo "Master node initialized"
         # receive connection from anywhere.. This should be changed!!
-        echo "host all all 0.0.0.0/0 md5" >>/var/lib/gpdb/data/gpmaster/gpsne-1/pg_hba.conf
-        gpstop -u
+        echo "host all all 0.0.0.0/0 md5" >>$MASTER_DATA_DIRECTORY/pg_hba.conf
+        echo 'pg_hba.conf changed. Restarting gpdb.'
+        gpstop -a
+        gpstart -a
     else
-        echo 'Master exists. Restarting gpdb.'
+        echo 'Master exists. Starting gpdb.'
         gpstart -a
     fi
 else
