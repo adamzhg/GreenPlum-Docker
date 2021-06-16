@@ -18,9 +18,8 @@ then
         echo "Master node initialized"
         # receive connection from anywhere.. This should be changed!!
         echo "host all all 0.0.0.0/0 md5" >>$MASTER_DATA_DIRECTORY/pg_hba.conf
-        echo 'pg_hba.conf changed. Restarting gpdb.'
-        gpstop -a
-        gpstart -a
+        echo 'pg_hba.conf changed. Reload config without restart gpdb.'
+        gpstop -u
     else
         echo 'Master exists. Starting gpdb.'
         gpstart -a
