@@ -1,17 +1,15 @@
 #!/bin/bash
 
-
 pid=$(ps aux | grep [g]pmaster | grep -v grep | awk '{print $2}')
 echo $pid
 
-
 master_running () {
-if [ -z "$pid" ];
-    then echo "Process not running"
-         return 1
-    else echo "Process Running"
-         return 0
-fi;
+    if [ -z "$pid" ];
+        then echo "Process not running"
+            return 1
+        else echo "Process Running"
+            return 0
+    fi;
 }
 
 while :
@@ -23,5 +21,4 @@ do
         echo "greenplum master is no longer running"
         break
     fi
-    
 done

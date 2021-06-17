@@ -12,7 +12,7 @@
 # A name for the array you are configuring. You can use any name you 
 # like. Enclose the name in quotes if the name contains spaces.
 
-ARRAY_NAME="DATAROADTECH ARRAY"
+ARRAY_NAME="GPDB6 DOCKER"
 
 
 # This specifies the file that contains the list of segment host names 
@@ -40,7 +40,7 @@ SEG_PREFIX=gpsne
 # started on a segment host. The base port number will be 
 # incremented by one for each segment instance started on a host. 
 
-PORT_BASE=20000
+PORT_BASE=6000
 
 
 # This specifies the data storage location(s) where the script will 
@@ -57,7 +57,7 @@ PORT_BASE=20000
 # may want to create these directories on the segment hosts before running 
 # gpinitsystem and chown them to the appropriate user.
 
-declare -a DATA_DIRECTORY=(/var/lib/gpdb/data/gpdata1 /var/lib/gpdb/data/gpdata2)
+declare -a DATA_DIRECTORY=(/var/lib/gpdb/data/gpdata /var/lib/gpdb/data/gpdata)
 
 
 # The OS-configured hostname of the Greenplum Database master instance.
