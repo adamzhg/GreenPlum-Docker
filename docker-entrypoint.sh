@@ -16,16 +16,16 @@ then
         fi
 
         ./swarm_service_replicas_get.sh $GP_SEG_DOMAIN
-        TAR_REPLICAS=$?
-        if [[ $TAR_REPLICAS -ne 0 ]]; then
-            echo "Need $TAR_REPLICAS hosts as clusters"
+        tar_replicas=$?
+        if [[ $tar_replicas -ne 0 ]]; then
+            echo "Need $tar_replicas hosts as clusters"
         else
             echo "WARNING: cant determine the number of hosts clusters. Continue when scanning more than 1 host."
-            TAR_REPLICAS=1
+            tar_replicas=1
         fi
 
-        HOST_COUNT=0
-        until [[ $HOST_COUNT -ge $TAR_REPLICAS ]]; do
+        host_count=0
+        until [[ $host_count -ge $tar_replicas ]]; do
             sleep 1
             echo "Scanning swarm service ip..."
             rm -f $HOSTFILE
@@ -35,9 +35,9 @@ then
                 exit 1
             fi
 
-            HOST_COUNT=$(cat $HOSTFILE | wc -l)
-            HOST_COUNT=$((HOST_COUNT-1))
-            echo "Scan result $HOST_COUNT IP of service."
+            host_count=$(cat $HOSTFILE | wc -l)
+            host_count=$((host_count-1))
+            echo "Scan result $host_count IP of service."
         done
     fi
 
@@ -48,6 +48,7 @@ then
     if [ ! -d $MASTER_DATA_DIRECTORY ]; then
         echo 'Master directory does not exist. Initializing master from gpinitsystem_reflect.'
         
+        # Already configured, because the ssh key of all docker images is the same
         # gpssh-exkeys -f hostlist
         # if [[ $? -ne 0 ]]; then
         #     echo "ERROR: gpssh-exkeys error."
