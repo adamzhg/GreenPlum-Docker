@@ -13,7 +13,9 @@ RUN apt-get update \
     && add-apt-repository -y ppa:greenplum/db \
     && apt-get update \
     && apt-get install -y greenplum-db-6 \
-    && apt-get install -y less vim sudo openssh-server locales iputils-ping
+    && apt-get install -y less vim sudo openssh-server locales iputils-ping dnsutils curl gawk
+
+RUN curl -fsSL https://get.docker.com | bash
 
 RUN GPVERSION=$(ls /opt/ | grep -i "greenplum-db" | sed 's/greenplum-db-//g') \
     && ln -s /opt/greenplum-db-${GPVERSION} /opt/gpdb
@@ -45,6 +47,13 @@ RUN usermod -aG sudo gpadmin
 ADD monitor_master.sh .
 RUN chmod +x monitor_master.sh
 RUN echo 'gpadmin ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+# auto create hostlist when not exist
+ADD swarm_service_ip_scan.sh .
+RUN chmod +x swarm_service_ip_scan.sh
+
+ADD swarm_service_replicas_get.sh .
+RUN chmod +x swarm_service_replicas_get.sh
 
 # gpadmin must have permission to write to these directories
 RUN chown -R gpadmin:gpadmin /var/lib/gpdb

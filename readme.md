@@ -38,6 +38,11 @@ From the command line execute the following command:
 docker stack deploy -c docker-compose-stack.yml greenplum-stack
 ```
 
+Deploy one segment for each docker swarm node
+```sh
+docker stack deploy -c docker-compose-swarm.yml greenplum-swarm
+```
+
 You can connect to your host using PGADMIN on port 5432 user/pass is gpadmin/dataroad
 
 ### singlehost
