@@ -32,7 +32,6 @@ then
             ./swarm_service_ip_scan.sh $GP_SEG_DOMAIN $HOSTFILE
             if [[ $? -ne 0 ]]; then
                 echo "ERROR: create hostfile error."
-                exit 1
             fi
 
             host_count=$(cat $HOSTFILE | wc -l)
@@ -64,14 +63,15 @@ then
         gpinitsystem -a -c gpinitsys --su_password=$GP_PASSWD -h hostlist
         if [[ $? -ne 0 ]]; then
             echo "ERROR: gpinitsystem error."
-            exit 1
+        else
+            echo "Master node initialized"
         fi
-        echo "Master node initialized"
-
-        # receive connection from anywhere.. This should be changed!!
-        echo "host all all 0.0.0.0/0 md5" >>$MASTER_DATA_DIRECTORY/pg_hba.conf
-        echo 'pg_hba.conf changed. Reload config without restart gpdb.'
-        gpstop -u
+        if [[ -f "$MASTER_DATA_DIRECTORY/pg_hba.conf" ]]; then
+            # receive connection from anywhere.. This should be changed!!
+            echo "host all all 0.0.0.0/0 md5" >>$MASTER_DATA_DIRECTORY/pg_hba.conf
+            echo 'pg_hba.conf changed. Reload config without restart gpdb.'
+            gpstop -u
+        fi
     else
         echo 'Master exists. Starting gpdb.'
         gpstart -a

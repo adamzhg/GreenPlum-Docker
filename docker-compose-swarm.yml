@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   db_seg:
-    image: www.nhregistry.cn/edata/greenplum:6
+    image: xiaoyao9184/greenplum:6
     command: tail -f /dev/null
     environment:
       - GP_NODE=segment
@@ -15,7 +15,7 @@ services:
         constraints:
           - node.platform.os == linux
   db_master:
-    image: www.nhregistry.cn/edata/greenplum:6
+    image: xiaoyao9184/greenplum:6
     command: tail -f /dev/null
     environment:
       - GP_NODE=master
