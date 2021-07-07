@@ -1,52 +1,55 @@
 version: "3"
 services:
   db_seg_1:
-    image: greenplum:6.13.0
+    image: greenplum:6
     build: .
     container_name: db_seg_1
-    environment:
-       - GP_NODE=segment
     hostname: db_seg_1
     command: tail -f /dev/null
+    environment:
+      - GP_NODE=segment
     volumes:
-      - /data/docker-disk/share-data/greenplum:/var/lib/gpdb/data
+      - gpdb1:/var/lib/gpdb/data
     networks:
-      - xdzsoft
+      - gpdb
   db_seg_2:
-    image: greenplum:6.13.0
+    image: greenplum:6
     build: .
     container_name: db_seg_2
-    environment:
-       - GP_NODE=segment
     hostname: db_seg_2
     command: tail -f /dev/null
+    environment:
+      - GP_NODE=segment
     volumes:
-      - /data/docker-disk/share-data/greenplum:/var/lib/gpdb/data
+      - gpdb2:/var/lib/gpdb/data
     networks:
-      - xdzsoft
+      - gpdb
   db_master_1:
-    image: greenplum:6.13.0
+    image: greenplum:6
     build: .
     container_name: db_master_1
-    environment:
-       - GP_NODE=master
-       - HOSTFILE=multihost
     hostname: db_master_1
     command: tail -f /dev/null
+    environment:
+      - GP_NODE=master
+      - HOSTFILE=multihost
     volumes:
-      - /data/docker-disk/share-data/greenplum:/var/lib/gpdb/data
+      - gpdb0:/var/lib/gpdb/data
+    ports:
+      - "5432:5432"
     depends_on: 
       - db_seg_1
       - db_seg_2
-    ports:
-      - "5432:5432"
     links:
       - db_seg_1:seg1
       - db_seg_2:seg2
     networks:
-      - xdzsoft
+      - gpdb
 
 networks:
-  xdzsoft:
-    external: true
+  gpdb:
 
+volumes:
+  gpdb0:
+  gpdb1:
+  gpdb2:

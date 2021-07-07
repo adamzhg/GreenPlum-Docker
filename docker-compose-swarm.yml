@@ -1,0 +1,42 @@
+version: "3.8"
+services:
+  db_seg:
+    image: xiaoyao9184/greenplum:6
+    command: tail -f /dev/null
+    environment:
+      - GP_NODE=segment
+    volumes:
+      - gpdb:/var/lib/gpdb/data
+    networks:
+      - gpdb
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.platform.os == linux
+  db_master:
+    image: xiaoyao9184/greenplum:6
+    command: tail -f /dev/null
+    environment:
+      - GP_NODE=master
+      - GP_PASSWD=dataroad
+      - GP_SEG_DOMAIN=tasks.db_seg
+      - HOSTFILE=./NONE
+    volumes:
+      - gpdb:/var/lib/gpdb/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - ":5432"
+    networks:
+      - gpdb
+    deploy:
+      placement:
+        constraints:
+          - node.platform.os == linux
+          - node.role == manager
+
+networks:
+  gpdb:
+
+volumes:
+  gpdb:
